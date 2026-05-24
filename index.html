@@ -104,6 +104,10 @@
       .project,
       .publication,
       .project-mark,
+      .portrait-panel,
+      .about-text,
+      .focus-item,
+      .credential,
       .button,
       .icon-link {
         transition: none;
@@ -328,6 +332,13 @@
         linear-gradient(155deg, rgba(13, 30, 51, 0.9), rgba(7, 17, 31, 0.92)),
         repeating-linear-gradient(90deg, transparent 0 4.4rem, rgba(148, 163, 184, 0.06) 4.4rem 4.45rem);
       box-shadow: var(--shadow);
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .portrait-panel:hover {
+      transform: translateY(-4px);
+      border-color: rgba(34, 211, 238, 0.42);
+      box-shadow: 0 28px 78px rgba(34, 211, 238, 0.14), var(--shadow);
     }
 
     .orbit {
@@ -417,6 +428,7 @@
 
     .stat b {
       display: block;
+      margin-bottom: 0.35rem;
       font-size: 1.45rem;
       line-height: 1;
     }
@@ -431,8 +443,43 @@
     }
 
     .section {
+      --section-accent: var(--teal);
+      --section-accent-soft: rgba(34, 211, 238, 0.12);
+      position: relative;
       padding: clamp(2.25rem, 5vw, 4rem) 0;
       border-top: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    .section::before {
+      content: "";
+      position: absolute;
+      top: 1.2rem;
+      left: 0;
+      width: 8rem;
+      height: 1px;
+      background: linear-gradient(90deg, var(--section-accent), transparent);
+      box-shadow: 0 0 18px var(--section-accent);
+      opacity: 0.72;
+    }
+
+    .section#about {
+      --section-accent: #22d3ee;
+      --section-accent-soft: rgba(34, 211, 238, 0.12);
+    }
+
+    .section#projects {
+      --section-accent: #f472b6;
+      --section-accent-soft: rgba(244, 114, 182, 0.13);
+    }
+
+    .section#publications {
+      --section-accent: #f5c56b;
+      --section-accent-soft: rgba(245, 197, 107, 0.13);
+    }
+
+    .section#experience {
+      --section-accent: #38bdf8;
+      --section-accent-soft: rgba(56, 189, 248, 0.12);
     }
 
     .section-header {
@@ -440,11 +487,24 @@
     }
 
     h2 {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
       margin: 0;
       font-family: Georgia, "Times New Roman", serif;
       font-size: clamp(2rem, 4vw, 3.2rem);
       line-height: 1;
       letter-spacing: 0;
+    }
+
+    h2::before {
+      content: "";
+      width: 0.78rem;
+      height: 0.78rem;
+      border-radius: 50%;
+      background: var(--section-accent);
+      box-shadow: 0 0 0 0.35rem var(--section-accent-soft), 0 0 24px var(--section-accent);
+      flex: 0 0 auto;
     }
 
     .section-header p,
@@ -469,10 +529,53 @@
       background: var(--panel);
       box-shadow: 0 14px 40px rgba(0, 0, 0, 0.22);
       backdrop-filter: blur(14px);
+      border-top-color: var(--section-accent);
     }
 
     .about-text {
       padding: clamp(1.2rem, 3vw, 2rem);
+    }
+
+    .about-text,
+    .focus-item,
+    .credential {
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .about-text:hover,
+    .focus-item:hover,
+    .credential:hover {
+      transform: translateY(-3px);
+      border-color: rgba(34, 211, 238, 0.34);
+      box-shadow: 0 18px 42px rgba(34, 211, 238, 0.1);
+    }
+
+    .credential-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+    }
+
+    .credential {
+      padding: 1rem;
+      border: 1px solid rgba(34, 211, 238, 0.18);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(34, 211, 238, 0.1), rgba(244, 114, 182, 0.06)),
+        rgba(13, 30, 51, 0.7);
+    }
+
+    .credential b {
+      display: block;
+      margin-bottom: 0.18rem;
+      color: var(--ink);
+      line-height: 1.25;
+    }
+
+    .credential span {
+      color: var(--muted);
+      font-size: 0.9rem;
     }
 
     .focus-list {
@@ -627,6 +730,7 @@
       background: var(--panel);
       box-shadow: 0 14px 40px rgba(0, 0, 0, 0.22);
       backdrop-filter: blur(14px);
+      border-top-color: var(--section-accent);
     }
 
     .publication-meta {
@@ -733,6 +837,10 @@
       }
 
       .role {
+        grid-template-columns: 1fr;
+      }
+
+      .credential-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -849,10 +957,16 @@
             <p>
               I am an AI engineer and backend-heavy full-stack developer building RAG architectures, database schemas, REST APIs, data pipelines, and production maintenance workflows.
             </p>
-            <p>
-              M.S. Computer Science, California State University, Fullerton, May 2026.<br>
-              B.A. Astrophysics and Applied Mathematics, UC Berkeley, December 2022.
-            </p>
+            <div class="credential-grid" aria-label="Education credentials">
+              <div class="credential">
+                <b>M.S. Computer Science</b>
+                <span>California State University, Fullerton · May 2026</span>
+              </div>
+              <div class="credential">
+                <b>B.A. Astrophysics and Applied Mathematics</b>
+                <span>University of California, Berkeley · Dec 2022</span>
+              </div>
+            </div>
           </div>
 
           <div class="focus-list" aria-label="Focus areas">
