@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Tien Duong's portfolio: AI/ML, computer vision, astrophysics research, and software development.">
+  <title>Tien Duong | AI/ML Developer</title>
+  <style>
+    :root {
+      --ink: #18212f;
+      --muted: #5f6b7a;
+      --paper: #f6f8f7;
+      --panel: #ffffff;
+      --line: #dfe6e2;
+      --teal: #0f766e;
+      --gold: #c47a2c;
+      --rose: #b84a62;
+      --shadow: 0 22px 60px rgba(24, 33, 47, 0.13);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      position: relative;
+      margin: 0;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+      background:
+        radial-gradient(circle at top left, rgba(15, 118, 110, 0.14), transparent 31rem),
+        radial-gradient(circle at 88% 18%, rgba(184, 74, 98, 0.12), transparent 24rem),
+        linear-gradient(135deg, #f6f8f7 0%, #ffffff 46%, #edf5f4 100%);
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    body::before {
+      opacity: 0.5;
+      background-image:
+        radial-gradient(circle, rgba(15, 118, 110, 0.36) 0 1px, transparent 1.6px),
+        radial-gradient(circle, rgba(184, 74, 98, 0.28) 0 1px, transparent 1.7px),
+        radial-gradient(circle, rgba(24, 33, 47, 0.18) 0 1px, transparent 1.5px);
+      background-position: 0 0, 5rem 8rem, 11rem 3rem;
+      background-size: 13rem 13rem, 17rem 17rem, 19rem 19rem;
+      animation: starDrift 42s linear infinite;
+    }
+
+    body::after {
+      opacity: 0.48;
+      background-image:
+        linear-gradient(125deg, transparent 0 44%, rgba(15, 118, 110, 0.18) 47%, transparent 51%),
+        linear-gradient(125deg, transparent 0 60%, rgba(184, 74, 98, 0.16) 62%, transparent 65%);
+      background-size: 34rem 34rem, 46rem 46rem;
+      background-position: -24rem -12rem, 12rem -22rem;
+      animation: shootingStars 12s ease-in-out infinite;
+    }
+
+    @keyframes starDrift {
+      from {
+        background-position: 0 0, 5rem 8rem, 11rem 3rem;
+      }
+
+      to {
+        background-position: 13rem 18rem, 22rem 27rem, 30rem 22rem;
+      }
+    }
+
+    @keyframes shootingStars {
+      0%, 18% {
+        background-position: -34rem -20rem, 12rem -24rem;
+      }
+
+      48%, 100% {
+        background-position: 110vw 72vh, 120vw 88vh;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      body::before,
+      body::after {
+        animation: none;
+      }
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      min-height: 100vh;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem clamp(1rem, 4vw, 4rem);
+      border-bottom: 1px solid rgba(229, 221, 208, 0.7);
+      background: rgba(246, 248, 247, 0.86);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 2.4rem;
+      height: 2.4rem;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: white;
+      background: linear-gradient(135deg, var(--teal), var(--rose));
+      box-shadow: 0 10px 30px rgba(15, 118, 110, 0.2);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.35rem;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .nav-links a {
+      padding: 0.55rem 0.75rem;
+      border-radius: 999px;
+    }
+
+    .nav-links a:hover {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.86);
+    }
+
+    main {
+      width: min(1120px, calc(100% - 2rem));
+      margin: 0 auto;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.92fr);
+      gap: clamp(2rem, 5vw, 4.5rem);
+      align-items: center;
+      min-height: calc(100vh - 8.5rem);
+      padding: clamp(3rem, 7vw, 6.5rem) 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      width: fit-content;
+      margin: 0 0 1.1rem;
+      padding: 0.45rem 0.75rem;
+      border: 1px solid rgba(15, 118, 110, 0.22);
+      border-radius: 999px;
+      color: var(--teal);
+      font-size: 0.9rem;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 50%;
+      background: var(--teal);
+      box-shadow: 0 0 0 0.35rem rgba(15, 118, 110, 0.12);
+    }
+
+    h1 {
+      max-width: 12ch;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(3.2rem, 8vw, 6.7rem);
+      line-height: 0.95;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      max-width: 42rem;
+      margin: 1.5rem 0 0;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 1.7vw, 1.25rem);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 2rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 3rem;
+      padding: 0.8rem 1.1rem;
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      font-weight: 800;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(24, 33, 47, 0.12);
+    }
+
+    .button.primary {
+      color: white;
+      background: var(--ink);
+    }
+
+    .button.secondary {
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .contact-email {
+      margin: 0.65rem 0 0;
+      color: var(--ink);
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .contact-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.85rem;
+      margin-top: 1.15rem;
+    }
+
+    .hero .contact-row {
+      margin-top: 1.35rem;
+    }
+
+    .contact-row .contact-email {
+      margin: 0;
+    }
+
+    .icon-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.65rem;
+      height: 2.65rem;
+      border: 1px solid rgba(24, 33, 47, 0.14);
+      border-radius: 50%;
+      color: white;
+      background: #0a66c2;
+      box-shadow: 0 12px 28px rgba(10, 102, 194, 0.2);
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .icon-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 34px rgba(10, 102, 194, 0.28);
+    }
+
+    .icon-link svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      fill: currentColor;
+    }
+
+    .portrait-panel {
+      position: relative;
+      min-height: 520px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background:
+        linear-gradient(155deg, rgba(255, 255, 255, 0.94), rgba(237, 245, 244, 0.9)),
+        repeating-linear-gradient(90deg, transparent 0 4.4rem, rgba(24, 33, 47, 0.05) 4.4rem 4.45rem);
+      box-shadow: var(--shadow);
+    }
+
+    .orbit {
+      position: absolute;
+      inset: 10%;
+      border: 1px solid rgba(24, 33, 47, 0.13);
+      border-radius: 50%;
+    }
+
+    .orbit.two {
+      inset: 21% 7%;
+      transform: rotate(-22deg);
+      border-color: rgba(184, 74, 98, 0.22);
+    }
+
+    .orbit.three {
+      inset: 7% 25%;
+      transform: rotate(38deg);
+      border-color: rgba(196, 122, 44, 0.25);
+    }
+
+    .node {
+      position: absolute;
+      width: 0.9rem;
+      height: 0.9rem;
+      border-radius: 50%;
+      background: var(--rose);
+      box-shadow: 0 0 0 0.5rem rgba(184, 74, 98, 0.13);
+    }
+
+    .node.one {
+      top: 23%;
+      left: 18%;
+    }
+
+    .node.two {
+      right: 18%;
+      bottom: 25%;
+      background: var(--teal);
+      box-shadow: 0 0 0 0.5rem rgba(15, 118, 110, 0.13);
+    }
+
+    .node.three {
+      top: 16%;
+      right: 24%;
+      background: var(--gold);
+      box-shadow: 0 0 0 0.5rem rgba(196, 122, 44, 0.14);
+    }
+
+    .identity {
+      position: absolute;
+      right: 1.25rem;
+      bottom: 1.25rem;
+      left: 1.25rem;
+      padding: 1.25rem;
+      border: 1px solid rgba(229, 221, 208, 0.9);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(14px);
+    }
+
+    .identity strong {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-size: 1.1rem;
+    }
+
+    .identity span {
+      color: var(--muted);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      margin-top: 1.25rem;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--line);
+    }
+
+    .stat {
+      padding: 1rem;
+      background: var(--panel);
+    }
+
+    .stat b {
+      display: block;
+      font-size: 1.45rem;
+      line-height: 1;
+    }
+
+    .stat small {
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .stat small span {
+      display: block;
+    }
+
+    .section {
+      padding: clamp(2.25rem, 5vw, 4rem) 0;
+      border-top: 1px solid rgba(229, 221, 208, 0.85);
+    }
+
+    .section-header {
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .section-header p,
+    .about-text {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.03rem;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .about-text,
+    .focus-list,
+    .project {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: 0 14px 40px rgba(24, 33, 47, 0.06);
+    }
+
+    .about-text {
+      padding: clamp(1.2rem, 3vw, 2rem);
+    }
+
+    .focus-list {
+      display: grid;
+      gap: 1px;
+      overflow: hidden;
+      background: var(--line);
+    }
+
+    .focus-item {
+      padding: 1.2rem;
+      background: var(--panel);
+    }
+
+    .focus-item b {
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .focus-item span {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .project,
+    .publication {
+      display: flex;
+      min-height: 260px;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.35rem;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .project:hover,
+    .publication:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 46px rgba(24, 33, 47, 0.11);
+    }
+
+    .project-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .project-mark {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(15, 118, 110, 0.16), rgba(184, 74, 98, 0.12)),
+        var(--panel);
+      border: 1px solid var(--line);
+    }
+
+    .tag {
+      padding: 0.35rem 0.55rem;
+      border: 1px solid rgba(24, 33, 47, 0.12);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .project h3 {
+      margin: 0 0 0.55rem;
+      font-size: 1.35rem;
+      line-height: 1.2;
+    }
+
+    .project p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .project-link {
+      width: fit-content;
+      margin-top: 1.5rem;
+      color: var(--teal);
+      font-weight: 800;
+    }
+
+    .project-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      align-items: center;
+      margin-top: 1.5rem;
+    }
+
+    .project-actions .project-link {
+      margin-top: 0;
+    }
+
+    .link-button {
+      border: 0;
+      padding: 0;
+      color: var(--teal);
+      font: inherit;
+      font-weight: 800;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .demo-video {
+      display: none;
+      width: 100%;
+      margin-top: 1rem;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #0b1118;
+    }
+
+    .demo-video.is-visible {
+      display: block;
+    }
+
+    .demo-video video {
+      display: block;
+      width: 100%;
+      max-height: 420px;
+      background: #0b1118;
+    }
+
+    .publication {
+      min-height: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: 0 14px 40px rgba(24, 33, 47, 0.06);
+    }
+
+    .publication-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-bottom: 1rem;
+    }
+
+    .publication h3 {
+      margin: 0 0 0.65rem;
+      font-size: 1.45rem;
+      line-height: 1.2;
+    }
+
+    .publication h3 a {
+      color: inherit;
+    }
+
+    .publication h3 a:hover {
+      color: var(--teal);
+    }
+
+    .publication p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .publication-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
+    }
+
+    .experience {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .role {
+      display: grid;
+      grid-template-columns: 12rem 1fr;
+      gap: 1rem;
+      padding: 1.25rem 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .role:first-child {
+      border-top: 0;
+    }
+
+    .role b {
+      display: block;
+    }
+
+    .role span,
+    .role p {
+      color: var(--muted);
+    }
+
+    .role p {
+      margin: 0.25rem 0 0;
+    }
+
+    .role ul {
+      margin: 0.45rem 0 0;
+      padding-left: 1.1rem;
+      color: var(--muted);
+    }
+
+    .role li + li {
+      margin-top: 0.35rem;
+    }
+
+    @media (max-width: 860px) {
+      .hero,
+      .section-header,
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .portrait-panel {
+        min-height: 430px;
+      }
+
+      .project-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .role {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .nav {
+        position: static;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-links {
+        justify-content: flex-start;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="brand" href="#top" aria-label="Tien Duong home">
+        <span class="brand-mark">TD</span>
+        <span>Tien Duong</span>
+      </a>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#publications">Publications</a>
+        <a href="#experience">Experience</a>
+      </div>
+    </nav>
+
+    <main id="top">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">AI Engineer + Backend-Heavy Full-Stack Developer</p>
+          <h1>Tien Duong</h1>
+          <p class="hero-copy">
+            I build end-to-end AI systems across RAG workflows, database design, REST APIs, data pipelines, and computer vision, turning research ideas into reliable application infrastructure.
+          </p>
+          <div class="contact-row" aria-label="Contact links">
+            <span class="contact-email">tienduong.w98@gmail.com</span>
+            <a class="icon-link" href="https://www.linkedin.com/in/tien-duong-285ba9273/" target="_blank" rel="noreferrer" aria-label="Tien Duong on LinkedIn">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20.45 20.45h-3.56v-5.58c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.94v5.68H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.02H3.56V9h3.56v11.45ZM22.23 0H1.76C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.76 24h20.47c.97 0 1.77-.77 1.77-1.72V1.72C24 .77 23.2 0 22.23 0Z"/>
+              </svg>
+            </a>
+          </div>
+          <div class="actions" aria-label="Primary links">
+            <a class="button primary" href="#projects">View Projects</a>
+          </div>
+        </div>
+
+        <div class="portrait-panel" aria-label="Abstract research visualization">
+          <span class="orbit"></span>
+          <span class="orbit two"></span>
+          <span class="orbit three"></span>
+          <span class="node one"></span>
+          <span class="node two"></span>
+          <span class="node three"></span>
+          <div class="identity">
+            <strong>From telescopes to artificial intelligence</strong>
+            <span>Research, model building, data pipelines, and teaching.</span>
+            <div class="stats">
+              <div class="stat">
+                <b>AI</b>
+                <small>
+                  <span>RAG</span>
+                  <span>Computer Vision</span>
+                </small>
+              </div>
+              <div class="stat">
+                <b>Backend</b>
+                <small>
+                  <span>APIs</span>
+                  <span>Databases</span>
+                </small>
+              </div>
+              <div class="stat">
+                <b>DevOps</b>
+                <small>
+                  <span>Cloud</span>
+                  <span>Deployment</span>
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="section" id="about">
+        <div class="section-header">
+          <h2>About</h2>
+        </div>
+
+        <div class="about-grid">
+          <div class="about-text">
+            <p>
+              I am an AI engineer and backend-heavy full-stack developer building RAG architectures, database schemas, REST APIs, data pipelines, and production maintenance workflows.
+            </p>
+            <p>
+              M.S. Computer Science, California State University, Fullerton, May 2026.<br>
+              B.A. Astrophysics and Applied Mathematics, UC Berkeley, December 2022.
+            </p>
+          </div>
+
+          <div class="focus-list" aria-label="Focus areas">
+            <div class="focus-item">
+              <b>AI Application Systems</b>
+              <span>RAG workflows, LLM API integration, retrieval pipelines, and model-backed features.</span>
+            </div>
+            <div class="focus-item">
+              <b>Backend Infrastructure</b>
+              <span>REST APIs, PostgreSQL schemas, indexing, cron jobs, and cloud operations.</span>
+            </div>
+            <div class="focus-item">
+              <b>Computer Vision Research</b>
+              <span>RGB-depth modeling, nutrition estimation, medical image generation, and evaluation.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="projects">
+        <div class="section-header">
+          <h2>Projects</h2>
+        </div>
+
+        <div class="project-grid">
+          <article class="project">
+            <div>
+              <div class="project-top">
+                <span class="project-mark" aria-hidden="true"></span>
+                <span class="tag">Computer Vision</span>
+              </div>
+              <h3>Health App Development</h3>
+              <p>
+                Real-time food nutrition analysis to help users track dietary intake from meal images.
+              </p>
+            </div>
+            <div>
+              <div class="project-actions">
+                <button class="link-button" type="button" data-demo-toggle="health-demo" aria-expanded="false" aria-controls="health-demo">View demo</button>
+              </div>
+              <div class="demo-video" id="health-demo">
+                <video controls preload="metadata">
+                  <source src="asset/food%20demo.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </div>
+          </article>
+
+          <article class="project">
+            <div>
+              <div class="project-top">
+                <span class="project-mark" aria-hidden="true"></span>
+                <span class="tag">Full Stack + AI</span>
+              </div>
+              <h3>Coach Scheduler App</h3>
+              <p>
+                AI-assisted platform for lesson planning, schedule management, parent outreach, email reply handling, administrative workflows, and earnings tracking.
+              </p>
+            </div>
+            <span class="project-link">App demo link coming soon</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="publications">
+        <div class="section-header">
+          <h2>Publications</h2>
+        </div>
+
+        <article class="publication">
+          <div>
+            <div class="publication-meta">
+              <span class="tag">Thesis</span>
+              <span class="tag">Zenodo</span>
+              <span class="tag">May 2026</span>
+            </div>
+            <h3>
+              <a href="https://zenodo.org/records/20048116" target="_blank" rel="noreferrer">VRAM Optimization for Transformers Based Nutrition Prediction Model</a>
+            </h3>
+            <p>
+              Proposed and evaluated memory-efficient training techniques for a transformer-based nutrition prediction framework, reducing peak VRAM by 77% and reserved VRAM by 78% while maintaining model accuracy.
+            </p>
+          </div>
+          <div class="publication-actions">
+            <span class="project-link">DOI: 10.5281/zenodo.20048116</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="section" id="experience">
+        <div class="section-header">
+          <h2>Experience</h2>
+        </div>
+
+        <div class="experience">
+          <div class="role">
+            <span>Jan 2026 - Present</span>
+            <div>
+              <b>ReliBon AI, Full-Stack and AI Engineer</b>
+              <ul>
+                <li>Designed backend infrastructure for a real estate agent AI assistant, including relational database schemas, REST APIs, service interactions, and AI integration workflows.</li>
+                <li>Built data ingestion pipelines to extract, clean, transform, and prepare structured data for application use and AI-powered retrieval.</li>
+                <li>Managed cloud database operations, cron maintenance, and indexing/query optimization that reduced execution time from 35 seconds to 5 seconds.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="role">
+            <span>Mar 2025 - Present</span>
+            <div>
+              <b>Fufu Academy, C++ Instructor</b>
+              <ul>
+                <li>Designed and taught structured C++ curriculum covering variables, control flow, arrays, and algorithmic problem solving.</li>
+                <li>Created hands-on coding projects and adapted instruction for diverse learners, including students requiring accessibility accommodations.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="role">
+            <span>Sep 2024 - May 2026</span>
+            <div>
+              <b>California State University, Fullerton, Computer Vision and AI Researcher</b>
+              <ul>
+                <li>Developed and optimized multimodal machine learning models integrating RGB and depth data for nutrition prediction.</li>
+                <li>Reduced VRAM consumption of a transformer-based nutrition prediction model by about 80% while maintaining accuracy, with evaluation using AUC and F1-score.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="role">
+            <span>Jan 2025 - May 2026</span>
+            <div>
+              <b>California State University, Fullerton, Teaching Associate</b>
+              <ul>
+                <li>Developed Python curriculum covering core programming concepts, data structures, OOP, debugging, and code formatting.</li>
+                <li>Designed coding assignments with automated unit tests and structured evaluation workflows for correctness, efficiency, and code quality.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="role">
+            <span>UC Berkeley</span>
+            <div>
+              <b>Astrophysics Research Assistant</b>
+              <ul>
+                <li>Worked on supernova and gamma-ray burst detection using Chandra Telescope and Young Supernova Experiment data.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+  <script>
+    document.querySelectorAll("[data-demo-toggle]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const demo = document.getElementById(button.dataset.demoToggle);
+        if (!demo) return;
+
+        const isVisible = demo.classList.toggle("is-visible");
+        button.setAttribute("aria-expanded", String(isVisible));
+        button.textContent = isVisible ? "Hide demo" : "View demo";
+      });
+    });
+  </script>
+</body>
+</html>

@@ -2,39 +2,1036 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Tien Duong – Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Tien Duong's portfolio: AI/ML, computer vision, astrophysics research, and software development.">
+  <title>Tien Duong | AI/ML Developer</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 40px; background: #fafafa; }
-    header { text-align: center; }
-    section { margin: 40px 0; }
-    h1, h2 { color: #333; }
+    :root {
+      --ink: #edf7ff;
+      --muted: #9fb2c7;
+      --paper: #07111f;
+      --panel: rgba(10, 23, 39, 0.78);
+      --panel-strong: rgba(13, 30, 51, 0.9);
+      --line: rgba(148, 163, 184, 0.22);
+      --teal: #22d3ee;
+      --gold: #f5c56b;
+      --rose: #f472b6;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      position: relative;
+      margin: 0;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(34, 211, 238, 0.18), transparent 27rem),
+        radial-gradient(circle at 85% 18%, rgba(244, 114, 182, 0.13), transparent 28rem),
+        radial-gradient(circle at 50% 100%, rgba(245, 197, 107, 0.08), transparent 31rem),
+        linear-gradient(135deg, #050b14 0%, #07111f 42%, #0d1526 100%);
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    body::before {
+      opacity: 0.58;
+      background-image:
+        linear-gradient(rgba(34, 211, 238, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34, 211, 238, 0.1) 1px, transparent 1px),
+        radial-gradient(circle, rgba(34, 211, 238, 0.38) 0 1px, transparent 1.7px),
+        radial-gradient(circle, rgba(244, 114, 182, 0.32) 0 1px, transparent 1.7px);
+      background-position: 0 0, 0 0, 4rem 5rem, 12rem 9rem;
+      background-size: 5rem 5rem, 5rem 5rem, 14rem 14rem, 20rem 20rem;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.2));
+      animation: neuralDrift 36s linear infinite;
+    }
+
+    body::after {
+      opacity: 0.62;
+      background-image:
+        linear-gradient(100deg, transparent 0 38%, rgba(34, 211, 238, 0.18) 40%, transparent 43%),
+        linear-gradient(100deg, transparent 0 55%, rgba(245, 197, 107, 0.12) 58%, transparent 61%),
+        radial-gradient(circle at 20% 22%, rgba(34, 211, 238, 0.16), transparent 10rem);
+      background-size: 46rem 28rem, 58rem 34rem, 100% 100%;
+      background-position: -38rem 5rem, 20rem -16rem, 0 0;
+      animation: signalFlow 18s ease-in-out infinite;
+    }
+
+    @keyframes neuralDrift {
+      from {
+        background-position: 0 0, 0 0, 4rem 5rem, 12rem 9rem;
+      }
+
+      to {
+        background-position: 5rem 5rem, 5rem 5rem, 18rem 19rem, 32rem 29rem;
+      }
+    }
+
+    @keyframes signalFlow {
+      0%, 18% {
+        background-position: -40rem 5rem, 18rem -18rem, 0 0;
+      }
+
+      48%, 100% {
+        background-position: 110vw 60vh, 120vw 72vh, 0 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      body::before,
+      body::after {
+        animation: none;
+      }
+
+      .reveal,
+      .demo-video,
+      .project,
+      .publication,
+      .project-mark,
+      .button,
+      .icon-link {
+        transition: none;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      min-height: 100vh;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem clamp(1rem, 4vw, 4rem);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+      background: rgba(5, 11, 20, 0.78);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 2.4rem;
+      height: 2.4rem;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: white;
+      background: linear-gradient(135deg, #0ea5e9, var(--rose));
+      box-shadow: 0 10px 30px rgba(34, 211, 238, 0.24);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.35rem;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .nav-links a {
+      padding: 0.55rem 0.75rem;
+      border-radius: 999px;
+    }
+
+    .nav-links a:hover {
+      color: var(--ink);
+      background: rgba(34, 211, 238, 0.1);
+    }
+
+    main {
+      width: min(1120px, calc(100% - 2rem));
+      margin: 0 auto;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.92fr);
+      gap: clamp(2rem, 5vw, 4.5rem);
+      align-items: center;
+      min-height: calc(100vh - 8.5rem);
+      padding: clamp(3rem, 7vw, 6.5rem) 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      width: fit-content;
+      margin: 0 0 1.1rem;
+      padding: 0.45rem 0.75rem;
+      border: 1px solid rgba(34, 211, 238, 0.26);
+      border-radius: 999px;
+      color: var(--teal);
+      font-size: 0.9rem;
+      font-weight: 700;
+      background: rgba(10, 23, 39, 0.72);
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 50%;
+      background: var(--teal);
+      box-shadow: 0 0 0 0.35rem rgba(34, 211, 238, 0.12);
+    }
+
+    h1 {
+      max-width: 12ch;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(3.2rem, 8vw, 6.7rem);
+      line-height: 0.95;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      max-width: 42rem;
+      margin: 1.5rem 0 0;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 1.7vw, 1.25rem);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 2rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 3rem;
+      padding: 0.8rem 1.1rem;
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      font-weight: 800;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(34, 211, 238, 0.16);
+    }
+
+    .button.primary {
+      color: white;
+      border-color: rgba(34, 211, 238, 0.48);
+      background: linear-gradient(135deg, #0891b2, #1d4ed8);
+      box-shadow: 0 14px 34px rgba(34, 211, 238, 0.18);
+    }
+
+    .button.secondary {
+      background: rgba(10, 23, 39, 0.72);
+    }
+
+    .contact-email {
+      margin: 0.65rem 0 0;
+      color: var(--ink);
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .contact-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.85rem;
+      margin-top: 1.15rem;
+    }
+
+    .hero .contact-row {
+      margin-top: 1.35rem;
+    }
+
+    .contact-row .contact-email {
+      margin: 0;
+    }
+
+    .icon-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.65rem;
+      height: 2.65rem;
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      border-radius: 50%;
+      color: white;
+      background: #0a66c2;
+      box-shadow: 0 12px 28px rgba(34, 211, 238, 0.2);
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .icon-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 34px rgba(34, 211, 238, 0.28);
+    }
+
+    .icon-link svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      fill: currentColor;
+    }
+
+    .portrait-panel {
+      position: relative;
+      min-height: 520px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 22% 24%, rgba(34, 211, 238, 0.16), transparent 12rem),
+        radial-gradient(circle at 76% 30%, rgba(244, 114, 182, 0.12), transparent 11rem),
+        linear-gradient(155deg, rgba(13, 30, 51, 0.9), rgba(7, 17, 31, 0.92)),
+        repeating-linear-gradient(90deg, transparent 0 4.4rem, rgba(148, 163, 184, 0.06) 4.4rem 4.45rem);
+      box-shadow: var(--shadow);
+    }
+
+    .orbit {
+      position: absolute;
+      inset: 10%;
+      border: 1px solid rgba(34, 211, 238, 0.18);
+      border-radius: 50%;
+    }
+
+    .orbit.two {
+      inset: 21% 7%;
+      transform: rotate(-22deg);
+      border-color: rgba(244, 114, 182, 0.24);
+    }
+
+    .orbit.three {
+      inset: 7% 25%;
+      transform: rotate(38deg);
+      border-color: rgba(245, 197, 107, 0.24);
+    }
+
+    .node {
+      position: absolute;
+      width: 0.9rem;
+      height: 0.9rem;
+      border-radius: 50%;
+      background: var(--rose);
+      box-shadow: 0 0 0 0.5rem rgba(244, 114, 182, 0.13);
+    }
+
+    .node.one {
+      top: 23%;
+      left: 18%;
+    }
+
+    .node.two {
+      right: 18%;
+      bottom: 25%;
+      background: var(--teal);
+      box-shadow: 0 0 0 0.5rem rgba(34, 211, 238, 0.13);
+    }
+
+    .node.three {
+      top: 16%;
+      right: 24%;
+      background: var(--gold);
+      box-shadow: 0 0 0 0.5rem rgba(245, 197, 107, 0.14);
+    }
+
+    .identity {
+      position: absolute;
+      right: 1.25rem;
+      bottom: 1.25rem;
+      left: 1.25rem;
+      padding: 1.25rem;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 8px;
+      background: rgba(10, 23, 39, 0.82);
+      backdrop-filter: blur(14px);
+    }
+
+    .identity strong {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-size: 1.1rem;
+    }
+
+    .identity span {
+      color: var(--muted);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      margin-top: 1.25rem;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--line);
+    }
+
+    .stat {
+      padding: 1rem;
+      background: rgba(13, 30, 51, 0.86);
+    }
+
+    .stat b {
+      display: block;
+      font-size: 1.45rem;
+      line-height: 1;
+    }
+
+    .stat small {
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .stat small span {
+      display: block;
+    }
+
+    .section {
+      padding: clamp(2.25rem, 5vw, 4rem) 0;
+      border-top: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    .section-header {
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .section-header p,
+    .about-text {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.03rem;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .about-text,
+    .focus-list,
+    .project {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.22);
+      backdrop-filter: blur(14px);
+    }
+
+    .about-text {
+      padding: clamp(1.2rem, 3vw, 2rem);
+    }
+
+    .focus-list {
+      display: grid;
+      gap: 1px;
+      overflow: hidden;
+      background: rgba(148, 163, 184, 0.18);
+    }
+
+    .focus-item {
+      padding: 1.2rem;
+      background: rgba(13, 30, 51, 0.82);
+    }
+
+    .focus-item b {
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .focus-item span {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .project,
+    .publication {
+      display: flex;
+      min-height: 260px;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.35rem;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .project:hover,
+    .publication:hover {
+      transform: translateY(-4px);
+      border-color: rgba(34, 211, 238, 0.42);
+      box-shadow: 0 20px 46px rgba(34, 211, 238, 0.16), 0 0 0 1px rgba(34, 211, 238, 0.1) inset;
+    }
+
+    .project-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .project-mark {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(244, 114, 182, 0.14)),
+        var(--panel-strong);
+      border: 1px solid var(--line);
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .project:hover .project-mark {
+      transform: scale(1.04);
+      box-shadow: 0 0 26px rgba(34, 211, 238, 0.2);
+    }
+
+    .tag {
+      padding: 0.35rem 0.55rem;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .project h3 {
+      margin: 0 0 0.55rem;
+      font-size: 1.35rem;
+      line-height: 1.2;
+    }
+
+    .project p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .project-link {
+      width: fit-content;
+      margin-top: 1.5rem;
+      color: var(--teal);
+      font-weight: 800;
+    }
+
+    .project-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      align-items: center;
+      margin-top: 1.5rem;
+    }
+
+    .project-actions .project-link {
+      margin-top: 0;
+    }
+
+    .link-button {
+      border: 0;
+      padding: 0;
+      color: var(--teal);
+      font: inherit;
+      font-weight: 800;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .demo-video {
+      width: 100%;
+      margin-top: 1rem;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #020617;
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(-0.4rem);
+      transition: max-height 320ms ease, opacity 220ms ease, transform 220ms ease;
+    }
+
+    .demo-video.is-visible {
+      max-height: 460px;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .demo-video video {
+      display: block;
+      width: 100%;
+      max-height: 420px;
+      background: #0b1118;
+    }
+
+    .publication {
+      min-height: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.22);
+      backdrop-filter: blur(14px);
+    }
+
+    .publication-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-bottom: 1rem;
+    }
+
+    .publication h3 {
+      margin: 0 0 0.65rem;
+      font-size: 1.45rem;
+      line-height: 1.2;
+    }
+
+    .publication h3 a {
+      color: inherit;
+    }
+
+    .publication h3 a:hover {
+      color: var(--teal);
+    }
+
+    .publication p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .publication-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
+    }
+
+    .experience {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .role {
+      display: grid;
+      grid-template-columns: 12rem 1fr;
+      gap: 1rem;
+      padding: 1.25rem 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .role:first-child {
+      border-top: 0;
+    }
+
+    .role b {
+      display: block;
+    }
+
+    .role span,
+    .role p {
+      color: var(--muted);
+    }
+
+    .role p {
+      margin: 0.25rem 0 0;
+    }
+
+    .role ul {
+      margin: 0.45rem 0 0;
+      padding-left: 1.1rem;
+      color: var(--muted);
+    }
+
+    .role li + li {
+      margin-top: 0.35rem;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(1rem);
+      transition: opacity 520ms ease, transform 520ms ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 860px) {
+      .hero,
+      .section-header,
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .portrait-panel {
+        min-height: 430px;
+      }
+
+      .project-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .role {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .nav {
+        position: static;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-links {
+        justify-content: flex-start;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .button {
+        width: 100%;
+      }
+    }
   </style>
+  <noscript>
+    <style>
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    </style>
+  </noscript>
 </head>
 <body>
-  <header>
-    <h1>Hi, I'm Tien Duong 👋</h1>
-    <p>AI/ML Developer • Computer Vision • Mobile Apps</p>
-  </header>
+  <div class="page">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="brand" href="#top" aria-label="Tien Duong home">
+        <span class="brand-mark">TD</span>
+        <span>Tien Duong</span>
+      </a>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#publications">Publications</a>
+        <a href="#experience">Experience</a>
+      </div>
+    </nav>
 
-  <h2>Introduction: </h2>
-  <p> Hi everyone, my name is Tien Duong and I am super excited to meet you. A quick introduction about me: I graduated from the University of Berkeley (UCB) with a degree in Astrophysics and Computer Science. At UCB, I work with Dr. Raffaella Margutti on Supernova and Gamma Ray Burst Detection. I also worked with 
-    data from the state-of-the-art Chandra Telescope and Young Supernova Experiment (YSE). My primary objective was to assist graduate student David Matthews with the detection/non-detection of supernova explosions. Furthermore, I also researched with ULAB at UCB under the supervision of Dr. Daniel Kasen
-, and my project was the habitability of planets in binary star systems (planets that orbit two stars). I am currently pursuing a Master's degree in Computer Science at California State University, Fullerton. My areas of expertise include Computer Vision, AI/ML Research and Implementation, Software Development, and IT support. I also taught 
-  at CSUF as a Teaching Associate and tutor at Fufu Academy as a C++ instructor. I am working with Dr. Yu Bai and Dr. Shangping Ren on nutrition prediction using an AI model. My current project is creating an end-to-end pipeline for detecting food on a plate as well as predicting the nutritional content
-    based on the amount of food. In my free time, I love playing games and relaxing with YouTube. If you would like to reach out to me, please don't hesitate to contact me using the email address or LinkedIn below. Cheers</p>
+    <main id="top">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">AI Engineer + Backend-Heavy Full-Stack Developer</p>
+          <h1>Tien Duong</h1>
+          <p class="hero-copy">
+            I build end-to-end AI systems across RAG workflows, database design, REST APIs, data pipelines, and computer vision, turning research ideas into reliable application infrastructure.
+          </p>
+          <div class="contact-row" aria-label="Contact links">
+            <span class="contact-email">tienduong.w98@gmail.com</span>
+            <a class="icon-link" href="https://www.linkedin.com/in/tien-duong-285ba9273/" target="_blank" rel="noreferrer" aria-label="Tien Duong on LinkedIn">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20.45 20.45h-3.56v-5.58c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.94v5.68H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.02H3.56V9h3.56v11.45ZM22.23 0H1.76C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.76 24h20.47c.97 0 1.77-.77 1.77-1.72V1.72C24 .77 23.2 0 22.23 0Z"/>
+              </svg>
+            </a>
+          </div>
+          <div class="actions" aria-label="Primary links">
+            <a class="button primary" href="#projects">View Projects</a>
+          </div>
+        </div>
 
-  <section>
-    <h2>Projects</h2>
-    <ul>
-      <li>🥗 Nutrition Prediction Pipeline — <a href="https://github.com/tien-m-duong/nutrition-prediction">GitHub</a></li>
-      <li>🧠 StyleGAN Retina Dataset Generation</li>
-    </ul>
-  </section>
+        <div class="portrait-panel" aria-label="Abstract research visualization">
+          <span class="orbit"></span>
+          <span class="orbit two"></span>
+          <span class="orbit three"></span>
+          <span class="node one"></span>
+          <span class="node two"></span>
+          <span class="node three"></span>
+          <div class="identity">
+            <strong>From telescopes to artificial intelligence</strong>
+            <span>Research, model building, data pipelines, and teaching.</span>
+            <div class="stats">
+              <div class="stat">
+                <b>AI</b>
+                <small>
+                  <span>RAG</span>
+                  <span>Computer Vision</span>
+                </small>
+              </div>
+              <div class="stat">
+                <b>Backend</b>
+                <small>
+                  <span>APIs</span>
+                  <span>Databases</span>
+                </small>
+              </div>
+              <div class="stat">
+                <b>DevOps</b>
+                <small>
+                  <span>Cloud</span>
+                  <span>Deployment</span>
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
 
-  <section>
-    <h2>Contact</h2>
-    <p>Email: <a href="tduong02041998@csu.fullerton.edu">tduong02041998@csu.fullerton.edu/a></p>
-    <p>LinkedIn: <a href="https://www.linkedin.com/in/tien-duong-285ba9273/">LinkedIn Profile</a></p>
-  </section>
+      <section class="section reveal" id="about">
+        <div class="section-header">
+          <h2>About</h2>
+        </div>
+
+        <div class="about-grid reveal">
+          <div class="about-text">
+            <p>
+              I am an AI engineer and backend-heavy full-stack developer building RAG architectures, database schemas, REST APIs, data pipelines, and production maintenance workflows.
+            </p>
+            <p>
+              M.S. Computer Science, California State University, Fullerton, May 2026.<br>
+              B.A. Astrophysics and Applied Mathematics, UC Berkeley, December 2022.
+            </p>
+          </div>
+
+          <div class="focus-list" aria-label="Focus areas">
+            <div class="focus-item">
+              <b>AI Application Systems</b>
+              <span>RAG workflows, LLM API integration, retrieval pipelines, and model-backed features.</span>
+            </div>
+            <div class="focus-item">
+              <b>Backend Infrastructure</b>
+              <span>REST APIs, PostgreSQL schemas, indexing, cron jobs, and cloud operations.</span>
+            </div>
+            <div class="focus-item">
+              <b>Computer Vision Research</b>
+              <span>RGB-depth modeling, nutrition estimation, medical image generation, and evaluation.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="projects">
+        <div class="section-header">
+          <h2>Projects</h2>
+        </div>
+
+        <div class="project-grid">
+          <article class="project reveal">
+            <div>
+              <div class="project-top">
+                <span class="project-mark" aria-hidden="true"></span>
+                <span class="tag">Computer Vision</span>
+              </div>
+              <h3>Health App Development</h3>
+              <p>
+                Real-time food nutrition analysis to help users track dietary intake from meal images.
+              </p>
+            </div>
+            <div>
+              <div class="project-actions">
+                <button class="link-button" type="button" data-demo-toggle="health-demo" aria-expanded="false" aria-controls="health-demo">View demo</button>
+              </div>
+              <div class="demo-video" id="health-demo">
+                <video controls preload="metadata">
+                  <source src="asset/food%20demo.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </div>
+          </article>
+
+          <article class="project reveal">
+            <div>
+              <div class="project-top">
+                <span class="project-mark" aria-hidden="true"></span>
+                <span class="tag">Full Stack + AI</span>
+              </div>
+              <h3>Coach Scheduler App</h3>
+              <p>
+                AI-assisted platform for lesson planning, schedule management, parent outreach, email reply handling, administrative workflows, and earnings tracking.
+              </p>
+            </div>
+            <span class="project-link">App demo link coming soon</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="section reveal" id="publications">
+        <div class="section-header">
+          <h2>Publications</h2>
+        </div>
+
+        <article class="publication reveal">
+          <div>
+            <div class="publication-meta">
+              <span class="tag">Thesis</span>
+              <span class="tag">Zenodo</span>
+              <span class="tag">May 2026</span>
+            </div>
+            <h3>
+              <a href="https://zenodo.org/records/20048116" target="_blank" rel="noreferrer">VRAM Optimization for Transformers Based Nutrition Prediction Model</a>
+            </h3>
+            <p>
+              Proposed and evaluated memory-efficient training techniques for a transformer-based nutrition prediction framework, reducing peak VRAM by 77% and reserved VRAM by 78% while maintaining model accuracy.
+            </p>
+          </div>
+          <div class="publication-actions">
+            <span class="project-link">DOI: 10.5281/zenodo.20048116</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="section reveal" id="experience">
+        <div class="section-header">
+          <h2>Experience</h2>
+        </div>
+
+        <div class="experience reveal">
+          <div class="role">
+            <span>Jan 2026 - Present</span>
+            <div>
+              <b>ReliBon AI, Full-Stack and AI Engineer</b>
+              <ul>
+                <li>Designed backend infrastructure for a real estate agent AI assistant, including relational database schemas, REST APIs, service interactions, and AI integration workflows.</li>
+                <li>Built data ingestion pipelines to extract, clean, transform, and prepare structured data for application use and AI-powered retrieval.</li>
+                <li>Managed cloud database operations, cron maintenance, and indexing/query optimization that reduced execution time from 35 seconds to 5 seconds.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="role">
+            <span>Mar 2025 - Present</span>
+            <div>
+              <b>Fufu Academy, C++ Instructor</b>
+              <ul>
+                <li>Designed and taught structured C++ curriculum covering variables, control flow, arrays, and algorithmic problem solving.</li>
+                <li>Created hands-on coding projects and adapted instruction for diverse learners, including students requiring accessibility accommodations.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="role">
+            <span>Sep 2024 - May 2026</span>
+            <div>
+              <b>California State University, Fullerton, Computer Vision and AI Researcher</b>
+              <ul>
+                <li>Developed and optimized multimodal machine learning models integrating RGB and depth data for nutrition prediction.</li>
+                <li>Reduced VRAM consumption of a transformer-based nutrition prediction model by about 80% while maintaining accuracy, with evaluation using AUC and F1-score.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="role">
+            <span>Jan 2025 - May 2026</span>
+            <div>
+              <b>California State University, Fullerton, Teaching Associate</b>
+              <ul>
+                <li>Developed Python curriculum covering core programming concepts, data structures, OOP, debugging, and code formatting.</li>
+                <li>Designed coding assignments with automated unit tests and structured evaluation workflows for correctness, efficiency, and code quality.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="role">
+            <span>UC Berkeley</span>
+            <div>
+              <b>Astrophysics Research Assistant</b>
+              <ul>
+                <li>Worked on supernova and gamma-ray burst detection using Chandra Telescope and Young Supernova Experiment data.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+  <script>
+    const revealItems = document.querySelectorAll(".reveal");
+
+    if ("IntersectionObserver" in window) {
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.14 });
+
+      revealItems.forEach((item) => revealObserver.observe(item));
+    } else {
+      revealItems.forEach((item) => item.classList.add("is-visible"));
+    }
+
+    document.querySelectorAll("[data-demo-toggle]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const demo = document.getElementById(button.dataset.demoToggle);
+        if (!demo) return;
+
+        const isVisible = demo.classList.toggle("is-visible");
+        button.setAttribute("aria-expanded", String(isVisible));
+        button.textContent = isVisible ? "Hide demo" : "View demo";
+      });
+    });
+  </script>
 </body>
 </html>
