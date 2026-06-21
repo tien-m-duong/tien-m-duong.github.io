@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Case study: Coach Scheduler App — AI-assisted platform for lesson planning, schedule management, parent outreach, and earnings tracking.">
+  <title>Coach Scheduler App | Case Study — Tien Duong</title>
+  <style>
+    :root {
+      --ink: #edf7ff;
+      --muted: #9fb2c7;
+      --paper: #07111f;
+      --panel: rgba(10, 23, 39, 0.78);
+      --panel-strong: rgba(13, 30, 51, 0.9);
+      --line: rgba(148, 163, 184, 0.22);
+      --teal: #22d3ee;
+      --gold: #f5c56b;
+      --rose: #f472b6;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      position: relative;
+      margin: 0;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(34, 211, 238, 0.18), transparent 27rem),
+        radial-gradient(circle at 85% 18%, rgba(244, 114, 182, 0.13), transparent 28rem),
+        radial-gradient(circle at 50% 100%, rgba(245, 197, 107, 0.08), transparent 31rem),
+        linear-gradient(135deg, #050b14 0%, #07111f 42%, #0d1526 100%);
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    body::before {
+      opacity: 0.58;
+      background-image:
+        linear-gradient(rgba(34, 211, 238, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34, 211, 238, 0.1) 1px, transparent 1px),
+        radial-gradient(circle, rgba(34, 211, 238, 0.38) 0 1px, transparent 1.7px),
+        radial-gradient(circle, rgba(244, 114, 182, 0.32) 0 1px, transparent 1.7px);
+      background-position: 0 0, 0 0, 4rem 5rem, 12rem 9rem;
+      background-size: 5rem 5rem, 5rem 5rem, 14rem 14rem, 20rem 20rem;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.2));
+      animation: neuralDrift 36s linear infinite;
+    }
+
+    body::after {
+      opacity: 0.62;
+      background-image:
+        linear-gradient(100deg, transparent 0 38%, rgba(34, 211, 238, 0.18) 40%, transparent 43%),
+        linear-gradient(100deg, transparent 0 55%, rgba(245, 197, 107, 0.12) 58%, transparent 61%),
+        radial-gradient(circle at 20% 22%, rgba(34, 211, 238, 0.16), transparent 10rem);
+      background-size: 46rem 28rem, 58rem 34rem, 100% 100%;
+      background-position: -38rem 5rem, 20rem -16rem, 0 0;
+      animation: signalFlow 18s ease-in-out infinite;
+    }
+
+    @keyframes neuralDrift {
+      from { background-position: 0 0, 0 0, 4rem 5rem, 12rem 9rem; }
+      to   { background-position: 5rem 5rem, 5rem 5rem, 18rem 19rem, 32rem 29rem; }
+    }
+
+    @keyframes signalFlow {
+      0%, 18%   { background-position: -40rem 5rem, 18rem -18rem, 0 0; }
+      48%, 100% { background-position: 110vw 60vh, 120vw 72vh, 0 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      body::before,
+      body::after { animation: none; }
+      .reveal { opacity: 1; transform: none; }
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Nav ── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem clamp(1rem, 4vw, 4rem);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+      background: rgba(5, 11, 20, 0.78);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-weight: 800;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 2.4rem;
+      height: 2.4rem;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: white;
+      background: linear-gradient(135deg, #0ea5e9, var(--rose));
+      box-shadow: 0 10px 30px rgba(34, 211, 238, 0.24);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.35rem;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .nav-links a {
+      padding: 0.55rem 0.75rem;
+      border-radius: 999px;
+    }
+
+    .nav-links a:hover {
+      color: var(--ink);
+      background: rgba(34, 211, 238, 0.1);
+    }
+
+    /* ── Layout ── */
+    main {
+      width: min(1120px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding-bottom: 6rem;
+    }
+
+    /* ── Case Study Hero ── */
+    .case-hero {
+      padding: clamp(3rem, 7vw, 5rem) 0 clamp(2rem, 4vw, 3rem);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-bottom: 2rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 700;
+      transition: color 180ms ease;
+    }
+
+    .back-link:hover { color: var(--teal); }
+
+    .back-link svg {
+      width: 1rem;
+      height: 1rem;
+      stroke: currentColor;
+      fill: none;
+    }
+
+    .case-hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .case-hero h1 {
+      max-width: 22ch;
+      margin: 0 0 1rem;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .case-hero-sub {
+      max-width: 58ch;
+      margin: 0 0 2rem;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.6vw, 1.2rem);
+    }
+
+    .case-hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 3rem;
+      padding: 0.8rem 1.4rem;
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      font-weight: 800;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(34, 211, 238, 0.16);
+    }
+
+    .button.primary {
+      color: white;
+      border-color: rgba(34, 211, 238, 0.48);
+      background: linear-gradient(135deg, #0891b2, #1d4ed8);
+      box-shadow: 0 14px 34px rgba(34, 211, 238, 0.18);
+    }
+
+    .button.secondary { background: rgba(10, 23, 39, 0.72); }
+
+    /* ── Tag ── */
+    .tag {
+      padding: 0.35rem 0.55rem;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .tag.teal  { color: var(--teal);  border-color: rgba(34, 211, 238, 0.3); }
+    .tag.gold  { color: var(--gold);  border-color: rgba(245, 197, 107, 0.3); }
+    .tag.rose  { color: var(--rose);  border-color: rgba(244, 114, 182, 0.3); }
+
+    /* ── Sections ── */
+    .section {
+      --section-accent: var(--teal);
+      --section-accent-soft: rgba(34, 211, 238, 0.12);
+      position: relative;
+      padding: clamp(2.5rem, 5vw, 4rem) 0;
+      border-top: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    .section::before {
+      content: "";
+      position: absolute;
+      top: 1.2rem;
+      left: 0;
+      width: 8rem;
+      height: 1px;
+      background: linear-gradient(90deg, var(--section-accent), transparent);
+      box-shadow: 0 0 18px var(--section-accent);
+      opacity: 0.72;
+    }
+
+    .section.accent-rose  { --section-accent: var(--rose);  --section-accent-soft: rgba(244, 114, 182, 0.13); }
+    .section.accent-gold  { --section-accent: var(--gold);  --section-accent-soft: rgba(245, 197, 107, 0.13); }
+    .section.accent-blue  { --section-accent: #38bdf8;      --section-accent-soft: rgba(56, 189, 248, 0.12); }
+
+    h2 {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 0 0 1.75rem;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.75rem);
+      line-height: 1;
+    }
+
+    h2::before {
+      content: "";
+      width: 0.78rem;
+      height: 0.78rem;
+      border-radius: 50%;
+      flex: 0 0 auto;
+      background: var(--section-accent);
+      box-shadow: 0 0 0 0.35rem var(--section-accent-soft), 0 0 24px var(--section-accent);
+    }
+
+    /* ── Panel ── */
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.22);
+      backdrop-filter: blur(14px);
+      border-top-color: var(--section-accent);
+      padding: clamp(1.25rem, 3vw, 2rem);
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .panel:hover {
+      transform: translateY(-3px);
+      border-color: rgba(34, 211, 238, 0.34);
+      box-shadow: 0 18px 42px rgba(34, 211, 238, 0.1);
+    }
+
+    .panel p { margin: 0; color: var(--muted); }
+    .panel p + p { margin-top: 0.9rem; }
+
+    /* ── Two-column grids ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .three-col {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    /* ── Feature card ── */
+    .feature-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.22);
+      backdrop-filter: blur(14px);
+      border-top-color: var(--section-accent);
+      padding: 1.35rem;
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(34, 211, 238, 0.42);
+      box-shadow: 0 20px 46px rgba(34, 211, 238, 0.14);
+    }
+
+    .feature-icon {
+      width: 2.8rem;
+      height: 2.8rem;
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(244, 114, 182, 0.14)),
+        var(--panel-strong);
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+    }
+
+    .feature-card h3 {
+      margin: 0 0 0.45rem;
+      font-size: 1.1rem;
+      line-height: 1.25;
+    }
+
+    .feature-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    /* ── Image placeholder ── */
+    .img-placeholder {
+      width: 100%;
+      border: 1px dashed rgba(148, 163, 184, 0.32);
+      border-radius: 8px;
+      background: rgba(10, 23, 39, 0.55);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      color: var(--muted);
+      font-size: 0.88rem;
+      text-align: center;
+      padding: 1.5rem;
+    }
+
+    .img-placeholder svg {
+      width: 2rem;
+      height: 2rem;
+      opacity: 0.45;
+      stroke: currentColor;
+      fill: none;
+    }
+
+    .img-placeholder span {
+      font-weight: 700;
+      opacity: 0.7;
+    }
+
+    .img-placeholder.tall  { min-height: 340px; }
+    .img-placeholder.short { min-height: 220px; }
+
+    /* ── Tech stack ── */
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .stack-item {
+      padding: 1rem;
+      border: 1px solid rgba(34, 211, 238, 0.18);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(34, 211, 238, 0.1), rgba(244, 114, 182, 0.06)),
+        rgba(13, 30, 51, 0.7);
+      transition: transform 180ms ease, border-color 180ms ease;
+    }
+
+    .stack-item:hover {
+      transform: translateY(-2px);
+      border-color: rgba(34, 211, 238, 0.38);
+    }
+
+    .stack-item b {
+      display: block;
+      margin-bottom: 0.2rem;
+      font-size: 0.95rem;
+    }
+
+    .stack-item span {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    /* ── Timeline / challenge list ── */
+    .challenge-list {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .challenge-item {
+      display: grid;
+      grid-template-columns: 2.5rem 1fr;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .challenge-num {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 0.9rem;
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(244, 114, 182, 0.14));
+      border: 1px solid rgba(34, 211, 238, 0.28);
+      flex: 0 0 auto;
+    }
+
+    .challenge-body b {
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .challenge-body p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    /* ── Outcome stats ── */
+    .outcome-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--line);
+      margin-bottom: 1.5rem;
+    }
+
+    .outcome-stat {
+      padding: 1.5rem;
+      background: rgba(13, 30, 51, 0.86);
+    }
+
+    .outcome-stat b {
+      display: block;
+      margin-bottom: 0.35rem;
+      font-size: 2rem;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--teal), var(--rose));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .outcome-stat small {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    /* ── Reveal ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(1rem);
+      transition: opacity 520ms ease, transform 520ms ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 860px) {
+      .two-col,
+      .three-col { grid-template-columns: 1fr; }
+      .outcome-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 620px) {
+      .nav {
+        position: static;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-links { justify-content: flex-start; }
+
+      .button { width: 100%; }
+    }
+  </style>
+  <noscript>
+    <style>
+      .reveal { opacity: 1; transform: none; }
+    </style>
+  </noscript>
+</head>
+<body>
+  <div class="page">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="brand" href="index.html" aria-label="Tien Duong home">
+        <span class="brand-mark">TD</span>
+        <span>Tien Duong</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html#about">About</a>
+        <a href="index.html#projects">Projects</a>
+        <a href="index.html#publications">Publications</a>
+        <a href="index.html#experience">Experience</a>
+      </div>
+    </nav>
+
+    <main>
+
+      <!-- ── Case Study Hero ── -->
+      <header class="case-hero reveal">
+        <a class="back-link" href="index.html#projects">
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 12L6 8l4-4"/>
+          </svg>
+          Back to projects
+        </a>
+
+        <div class="case-hero-meta">
+          <span class="tag teal">Full Stack</span>
+          <span class="tag rose">AI Integration</span>
+          <span class="tag gold">SaaS</span>
+        </div>
+
+        <h1>Coach Scheduler App</h1>
+        <p class="case-hero-sub">
+          An AI-assisted platform built for independent coaches and instructors covering schedule management, parent outreach, email automation, administrative workflows, and earnings tracking all in one place.
+        </p>
+
+        <div class="case-hero-actions">
+          <a class="button primary" href="https://coach.tien-duong.com/" target="_blank" rel="noreferrer">View Live App</a>
+          <a class="button secondary" href="index.html#projects">All Projects</a>
+        </div>
+      </header>
+
+      <!-- ── App Screenshot ── -->
+      <section class="section reveal" style="--section-accent: var(--rose); --section-accent-soft: rgba(244,114,182,0.13);">
+        <img class="walkthrough-img" src="asset/coach_scheduler/app%20view.png" alt="Coach Scheduler app view" style="width: 100%; border-radius: 8px; border: 1px solid var(--line); display: block; cursor: zoom-in;">
+      </section>
+
+      <!-- ── Overview ── -->
+      <section class="section reveal" id="overview">
+        <h2>Overview</h2>
+        <div class="panel">
+          <p>
+            Independent coaches, particularly academic tutors and sports instructors, spend a significant portion of their working time on administrative tasks: coordinating sessions, messaging parents, composing follow-up emails, and tracking payments. These tasks fragment their focus and reduce time spent on the actual work of teaching.
+          </p>
+          <p>
+            The Coach Scheduler App is a full-stack SaaS platform I designed and built from the ground up to consolidate these workflows into one AI-augmented tool, reducing the administrative overhead for solo coaches operating without support staff.
+          </p>
+        </div>
+      </section>
+
+      <!-- ── Problem ── -->
+      <section class="section accent-rose reveal" id="problem">
+        <h2>The Problem</h2>
+        <div class="challenge-list">
+          <div class="challenge-item reveal">
+            <span class="challenge-num">1</span>
+            <div class="challenge-body">
+              <b>Scheduling is fragmented across tools</b>
+              <p>Coaches juggle text messages, spreadsheets, and calendar apps with no single source of truth for their weekly schedule or student roster.</p>
+            </div>
+          </div>
+          <div class="challenge-item reveal">
+            <span class="challenge-num">2</span>
+            <div class="challenge-body">
+              <b>Parent communication is time-consuming</b>
+              <p>Writing and sending individual session summaries, progress updates, and schedule change notifications can take hours each week.</p>
+            </div>
+          </div>
+          <div class="challenge-item reveal">
+            <span class="challenge-num">3</span>
+            <div class="challenge-body">
+              <b>Earnings tracking is manual and error-prone</b>
+              <p>Without dedicated tooling, tracking session counts, rates, and payments by student requires manual effort that leads to missed income or billing errors.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Solution ── -->
+      <section class="section reveal" id="solution">
+        <h2>The Solution</h2>
+        <div class="two-col">
+          <div class="panel">
+            <p>
+              I built a platform that brings together the three things that eat up a coach's time the most: keeping the schedule organized, staying on top of parent messages, and knowing exactly what they have earned. Everything lives in one place so coaches are not switching between tools to piece together their week.
+            </p>
+            <p style="margin-top: 0.9rem;">
+              The AI layer handles the communication side. It drafts outreach messages, follows up on parent replies, and generates content that sounds like the coach rather than a generic template because it works from the actual context of each session and relationship.
+            </p>
+          </div>
+          <img class="walkthrough-img" src="asset/coach_scheduler/dashboard.png" alt="Coach Scheduler dashboard" style="width: 100%; border-radius: 8px; border: 1px solid var(--line); display: block;">
+        </div>
+      </section>
+
+      <!-- ── Features ── -->
+      <section class="section accent-gold reveal" id="features">
+        <h2>Key Features</h2>
+        <div class="three-col">
+
+          <div class="feature-card reveal">
+            <div class="feature-icon" aria-hidden="true">📅</div>
+            <h3>Schedule Management</h3>
+            <p>A weekly calendar view for managing sessions across multiple students. Coaches can create, edit, and cancel sessions with automatic conflict detection.</p>
+          </div>
+
+          <div class="feature-card reveal">
+            <div class="feature-icon" aria-hidden="true">📬</div>
+            <h3>Parent Outreach</h3>
+            <p>Drafts personalized session summary messages for parents based on session notes, student progress, and coach tone preferences. Ready to review and send in seconds.</p>
+          </div>
+
+          <div class="feature-card reveal">
+            <div class="feature-icon" aria-hidden="true">✉️</div>
+            <h3>Email Reply Handling</h3>
+            <p>Too many parent replies at once can overwhelm a coach, but leaving them hanging makes families feel disconnected. The app automatically checks for replies and sends a follow-up on the coach's behalf so there is no guilt and no missed messages.</p>
+          </div>
+
+          <div class="feature-card reveal">
+            <div class="feature-icon" aria-hidden="true">💰</div>
+            <h3>Earnings Tracking</h3>
+            <p>Tracks session counts and rates per student, calculates expected earnings per period, and surfaces unpaid or pending sessions with a clear payment status view.</p>
+          </div>
+
+          <div class="feature-card reveal">
+            <div class="feature-icon" aria-hidden="true">📋</div>
+            <h3>Administrative Workflows</h3>
+            <p>AI integration assists with confirming new sessions, handling scheduling rejections, and updating time slots as taken or cancelled so coaches spend less time on back and forth coordination.</p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── Feature Screenshots ── -->
+      <section class="section reveal" style="--section-accent: var(--teal); --section-accent-soft: rgba(34,211,238,0.12);">
+        <h2>Feature Walkthrough</h2>
+        <div class="three-col reveal">
+          <div>
+            <p style="color: var(--muted); margin: 0 0 0.75rem; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Schedule View</p>
+            <img class="walkthrough-img" src="asset/coach_scheduler/schedule%20view.png" alt="Schedule view" style="width: 100%; border-radius: 8px; border: 1px solid var(--line); display: block;">
+          </div>
+          <div>
+            <p style="color: var(--muted); margin: 0 0 0.75rem; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">AI Parent Outreach Draft</p>
+            <img class="walkthrough-img" src="asset/coach_scheduler/message%20outreach.png" alt="AI parent outreach draft" style="width: 100%; border-radius: 8px; border: 1px solid var(--line); display: block;">
+          </div>
+          <div>
+            <p style="color: var(--muted); margin: 0 0 0.75rem; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Auto Reply on Coach Behalf</p>
+            <img class="walkthrough-img" src="asset/coach_scheduler/auto%20reply.png" alt="Auto reply on coach behalf" style="width: 100%; border-radius: 8px; border: 1px solid var(--line); display: block;">
+          </div>
+        </div>
+
+        <div class="two-col reveal" style="margin-top: 1rem;">
+          <div>
+            <p style="color: var(--muted); margin: 0 0 0.75rem; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Month to Month Earnings</p>
+            <img class="walkthrough-img" src="asset/coach_scheduler/revenue%20tracking.png" alt="Month to month earnings tracking" style="width: 100%; border-radius: 8px; border: 1px solid var(--line); display: block;">
+          </div>
+          <div>
+            <p style="color: var(--muted); margin: 0 0 0.75rem; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Invoice Generation</p>
+            <img class="walkthrough-img" src="asset/coach_scheduler/invoice%20sending.png" alt="Generate and send invoice with personalized message" style="width: 100%; border-radius: 8px; border: 1px solid var(--line); display: block;">
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Tech Stack ── -->
+      <section class="section accent-blue reveal" id="stack">
+        <h2>Tech Stack</h2>
+        <div class="stack-grid reveal">
+          <div class="stack-item">
+            <b>Frontend</b>
+            <span>React, TypeScript, Tailwind CSS</span>
+          </div>
+          <div class="stack-item">
+            <b>Backend</b>
+            <span>Node.js, Resend, OpenAI API</span>
+          </div>
+          <div class="stack-item">
+            <b>Database</b>
+            <span>PostgreSQL, Prisma</span>
+          </div>
+          <div class="stack-item">
+            <b>Deployment</b>
+            <span>Vercel, Supabase, Cloudflare domain</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Outcome ── -->
+      <section class="section reveal" id="outcome">
+        <h2>Outcome</h2>
+
+        <div class="outcome-grid reveal">
+          <div class="outcome-stat">
+            <b>3</b>
+            <small>Core problems solved: scheduling, family outreach, and earnings</small>
+          </div>
+          <div class="outcome-stat">
+            <b>3</b>
+            <small>AI-powered workflows automating coach communication</small>
+          </div>
+          <div class="outcome-stat">
+            <b>Live</b>
+            <small>Deployed at coach.tien-duong.com</small>
+          </div>
+        </div>
+
+        <div class="panel reveal">
+          <p>
+            The app brings together scheduling, parent communication, and earnings tracking under a single interface, replacing the collection of spreadsheets, calendar apps, and messaging threads that most independent coaches rely on. The AI features are scoped to specific tasks and grounded in the coach's own data, so the output feels contextual rather than generic.
+          </p>
+          <p>
+            AI is what makes the app more than a scheduling tool. It handles the communication work that would otherwise fall through the cracks: drafting outreach, following up on replies, confirming sessions, and sending invoices with a personal touch. The goal is to keep pushing that further so coaches can focus entirely on teaching while the app handles everything around it.
+          </p>
+        </div>
+      </section>
+
+      <!-- ── CTA ── -->
+      <section class="section accent-rose reveal">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem;">
+          <div>
+            <h2 style="margin-bottom: 0.5rem;">Try the app</h2>
+            <p style="margin: 0; color: var(--muted);">Live at coach.tien-duong.com</p>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 0.8rem;">
+            <a class="button primary" href="https://coach.tien-duong.com/" target="_blank" rel="noreferrer">Open App</a>
+            <a class="button secondary" href="index.html#projects">All Projects</a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div id="lightbox" style="
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(10px);
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+    padding: 1.5rem;
+  ">
+    <img id="lightbox-img" src="" alt="" style="
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 8px;
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6);
+      object-fit: contain;
+      cursor: default;
+    ">
+  </div>
+
+  <script>
+    const revealItems = document.querySelectorAll(".reveal");
+
+    if ("IntersectionObserver" in window) {
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      revealItems.forEach((item) => obs.observe(item));
+    } else {
+      revealItems.forEach((item) => item.classList.add("is-visible"));
+    }
+
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+
+    document.querySelectorAll(".walkthrough-img").forEach((img) => {
+      img.style.cursor = "zoom-in";
+      img.addEventListener("click", () => {
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+        lightbox.style.display = "flex";
+        document.body.style.overflow = "hidden";
+      });
+    });
+
+    lightbox.addEventListener("click", (e) => {
+      if (e.target !== lightboxImg) {
+        lightbox.style.display = "none";
+        document.body.style.overflow = "";
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        lightbox.style.display = "none";
+        document.body.style.overflow = "";
+      }
+    });
+  </script>
+</body>
+</html>
